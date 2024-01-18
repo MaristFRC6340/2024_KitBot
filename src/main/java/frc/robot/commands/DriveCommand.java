@@ -33,10 +33,13 @@ public class DriveCommand extends Command {
   private NetworkTableEntry ledMode;
 
   // PID Control for Limelight Turn
-  private double kP = 0.025;
+  private double kP = .0375;//was .025
 
   // For PID Control
   double turnPower = 0;
+
+
+private boolean fieldCentric = true;
 
 
   /** Creates a new DriveCommand. */
@@ -56,7 +59,8 @@ public class DriveCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ledMode.setDouble(1);
+    ledMode.setDouble(1); // 3 is on, 1 is off
+    tx = limTable.getEntry("tx");
   }
 
   double leftX = 0;
@@ -77,16 +81,23 @@ public class DriveCommand extends Command {
     rightX = Robot.getDriveControlJoystick().getRawAxis(4); 
 
 
-    if (Robot.getDriveControlJoystick().getRawAxis(2) > 0.5) {
-      ledMode.setDouble(3);
+    if (Robot.getDriveControlJoystick().getRawAxis(2) > 0.5) { //left trigger
+      ledMode.setDouble(3); // On
       double error = tx.getDouble(0);
       turnPower = kP * error;
+      leftX = turnPower;
+      if(fieldCentric = true) {
+        leftY *= -1;
+      }
+      leftY=-0.2;
       System.out.println(tx.getDouble(0) + ", " + turnPower);
+      fieldCentric=false;
       
     }
     else {
-      ledMode.setDouble(1);
+      ledMode.setDouble(1); // Off
       turnPower = 0;
+      fieldCentric=true;
     }
 
 
@@ -95,7 +106,7 @@ public class DriveCommand extends Command {
                 MathUtil.applyDeadband(-leftY*speedControl, 0.06),
                 MathUtil.applyDeadband(-leftX*speedControl, 0.06),
                 MathUtil.applyDeadband(-rightX*speedControl, 0.06),
-                true,
+                fieldCentric,
                 true);
 
                 

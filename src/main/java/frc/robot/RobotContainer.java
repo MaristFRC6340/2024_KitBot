@@ -176,12 +176,31 @@ public class RobotContainer {
     // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
 
     return autoChooser.getSelected();
+
+    //return this.getOnTheFlyPath();
   }
 
   public Command getDriveCommand() {
     return m_DriveCommand;
   }
 
+  public Command getOnTheFlyPath() {
+    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+      new Pose2d(1, 1, Rotation2d.fromDegrees(0)),
+      new Pose2d(2, 1, Rotation2d.fromDegrees(0))
+
+    );
+
+    PathPlannerPath path = new PathPlannerPath(
+      bezierPoints,
+      new PathConstraints(3, 3, 6.28, 12.56),
+      new GoalEndState(0, Rotation2d.fromDegrees(-90))
+    );
+
+    path.preventFlipping=true;
+
+    return AutoBuilder.followPath(path);
+  }
   
 
   //AUTO COMMANDS
