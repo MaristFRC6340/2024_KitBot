@@ -22,13 +22,17 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.LaunchNote;
+import frc.robot.commands.PointToSpeakerCommand;
 import frc.robot.commands.PrepareLaunch;
 import frc.robot.commands.StopShooter;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HandSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -51,12 +55,19 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  private final HandSubsystem m_HandSubsystem = new HandSubsystem();
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+  //Create Triggers
   Trigger y = new JoystickButton(m_driverController, XboxController.Button.kY.value);
   Trigger a = new JoystickButton(m_driverController, XboxController.Button.kA.value);
   Trigger b = new JoystickButton(m_driverController, XboxController.Button.kB.value);
+  Trigger x = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+  Trigger rBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+  Trigger lBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+
+  //Trigger leftShouler = new JoystickButton(m_driverController, XboxController.Button.k.value);
   private final SendableChooser<Command> autoChooser;
 
   private final DriveCommand m_DriveCommand = new DriveCommand(m_robotDrive);
@@ -84,7 +95,7 @@ public class RobotContainer {
     //             -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
     //             true, true),
     //         m_robotDrive));
-
+    m_robotDrive.setDefaultCommand(m_DriveCommand);
 
     //Create sendable chooser and give it to the smartdashboard
     autoChooser = AutoBuilder.buildAutoChooser("Example Auto2");
@@ -117,10 +128,25 @@ public class RobotContainer {
         m_ShooterSubsystem.getIntakeCommand()
     );
 
-    b.whileTrue(
-      m_ShooterSubsystem.getAmpOuttakeCommand()
+    
+    /*b.whileTrue(
+      m_HandSubsystem.getOuttakeCommand()
+    );
+    */
+
+    lBumper.whileTrue(
+      m_HandSubsystem.getIntakeCommand()
     );
 
+
+     
+    b.whileTrue(
+      new SequentialCommandGroup(new PointToSpeakerCommand(m_robotDrive),
+       new PrepareLaunch(m_ShooterSubsystem).withTimeout(.5),
+        new WaitCommand(.5),
+        new LaunchNote(m_ShooterSubsystem))
+    );
+    
 
     //Give smart dashboard autos
 

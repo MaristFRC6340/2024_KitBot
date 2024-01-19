@@ -39,6 +39,8 @@ public class DriveCommand extends Command {
   double turnPower = 0;
 
 
+
+
 private boolean fieldCentric = true;
 
 
@@ -50,10 +52,12 @@ private boolean fieldCentric = true;
     tx = limTable.getEntry("tx");
     ledMode = limTable.getEntry("ledMode");
 
+
     
 
     // Use addRequirements() here to declare subsystem dependencies.
     m_robotDrive = drive;
+    addRequirements(m_robotDrive);
   }
 
   // Called when the command is initially scheduled.
@@ -89,7 +93,7 @@ private boolean fieldCentric = true;
       if(fieldCentric = true) {
         leftY *= -1;
       }
-      leftY=-0.2;
+      leftY=-0.5;
       System.out.println(tx.getDouble(0) + ", " + turnPower);
       fieldCentric=false;
       

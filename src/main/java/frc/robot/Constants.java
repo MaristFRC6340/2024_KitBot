@@ -95,7 +95,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.121;
+    public static final double kDrivingP = .121;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
@@ -162,5 +162,19 @@ public final class Constants {
     public static double kIntakeLowerMotor = -1;
     public static double kAmpTopMotorSpeed = .2;
     public static double kAmpLowerMotorSpeed = .4;
+  }
+
+  public static final class HandConstants {
+    public static final int kHandID = 8;
+    public static int kHandCurrentLimit = 20;
+    public static double kIntakePower = 1;
+    public static double kOuttakePower = -1;
+  }
+
+  public static final class LimelightConstants {
+    public static final double speakerAimtx = -20.89;
+    public static final double speakerAimty = 2.82;
+    public static final double kPX = .01;
+    public static final double kPY = .01;
   }
 }
