@@ -172,9 +172,10 @@ public final class Constants {
   }
 
   public static final class LimelightConstants {
-    public static final double speakerAimtx = -20.89;
-    public static final double speakerAimty = 2.82;
-    public static final double kPX = .01;
-    public static final double kPY = .01;
+    public static final double speakerAimtx = -20.91;
+    public static final double speakerAimty = 4.75;
+    public static final double kPX = .015;
+    public static final double kPY = .015;
+    public static double tolerance = 1.5;
   }
 }

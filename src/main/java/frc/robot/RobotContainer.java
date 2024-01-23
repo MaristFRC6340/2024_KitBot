@@ -77,11 +77,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     //Register Named Commands for auto
-    NamedCommands.registerCommand("prepareLaunch", new PrepareLaunch(m_ShooterSubsystem));
-    NamedCommands.registerCommand("launchNote", new LaunchNote(m_ShooterSubsystem));
-    NamedCommands.registerCommand("intakeSource", m_ShooterSubsystem.getIntakeCommand());
-    NamedCommands.registerCommand("stopShooter", new StopShooter(m_ShooterSubsystem));
-
+    configureNamedCommands();
     // Configure the button bindings
     configureButtonBindings();
     // Configure default commands
@@ -102,6 +98,22 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
+
+  /**
+   * Register all NamedCommands here for use in pathplanner
+   * general style is camelcase for NamedCommands to differentiate them from the class name
+   */
+  private void configureNamedCommands() {
+    NamedCommands.registerCommand("prepareLaunch", new PrepareLaunch(m_ShooterSubsystem));
+    NamedCommands.registerCommand("launchNote", new LaunchNote(m_ShooterSubsystem));
+    NamedCommands.registerCommand("intakeSource", m_ShooterSubsystem.getIntakeCommand());
+    NamedCommands.registerCommand("stopShooter", new StopShooter(m_ShooterSubsystem));
+    NamedCommands.registerCommand("aimAndScore", new SequentialCommandGroup(new PointToSpeakerCommand(m_robotDrive),
+       new PrepareLaunch(m_ShooterSubsystem).withTimeout(.5).handleInterrupt(() -> m_ShooterSubsystem.stop()),
+        new WaitCommand(.25),
+        new LaunchNote(m_ShooterSubsystem)
+        ));
+  }
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
@@ -129,10 +141,10 @@ public class RobotContainer {
     );
 
     
-    /*b.whileTrue(
+    x.whileTrue(
       m_HandSubsystem.getOuttakeCommand()
     );
-    */
+    
 
     lBumper.whileTrue(
       m_HandSubsystem.getIntakeCommand()
@@ -143,8 +155,8 @@ public class RobotContainer {
     b.whileTrue(
       new SequentialCommandGroup(new PointToSpeakerCommand(m_robotDrive),
        new PrepareLaunch(m_ShooterSubsystem).withTimeout(.5),
-        new WaitCommand(.5),
-        new LaunchNote(m_ShooterSubsystem))
+        new WaitCommand(.25),
+        new LaunchNote(m_ShooterSubsystem)).handleInterrupt(() -> m_ShooterSubsystem.stop())
     );
     
 

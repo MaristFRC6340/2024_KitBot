@@ -9,7 +9,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.LauncherConstants;
 
 public class LaunchNote extends Command {
-
+  int timer = 0;
     private ShooterSubsystem m_ShooterSubsystem;
 
   /** Creates a new ShooterCommand. */
@@ -29,7 +29,9 @@ public class LaunchNote extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    timer++;
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -40,6 +42,7 @@ public class LaunchNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+
+    return timer>60;
   }
 }

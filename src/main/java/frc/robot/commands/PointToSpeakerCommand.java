@@ -49,18 +49,30 @@ public class PointToSpeakerCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    xError = tx.getDouble(0)-LimelightConstants.speakerAimtx;
-    yError = LimelightConstants.speakerAimty-ty.getDouble(0);
+    if(tx.getDouble(0)!=0&&ty.getDouble(0)!=0)
+    {
+      xError = tx.getDouble(0)-LimelightConstants.speakerAimtx;
+      yError = LimelightConstants.speakerAimty-ty.getDouble(0);
 
-    System.out.print("x: " + xError);
-    System.out.println("y: " + yError);
-    m_DriveSubsystem.drive(
-        yError*LimelightConstants.kPY,
-        xError*LimelightConstants.kPX*-1,
-        0,
-        false,
-        false
-    );
+      System.out.print("x: " + xError);
+      System.out.println("y: " + yError);
+      m_DriveSubsystem.drive(
+          yError*LimelightConstants.kPY,
+          xError*LimelightConstants.kPX*-1,
+          0,
+          false,
+          true
+      );
+    }
+    else {
+      m_DriveSubsystem.drive(
+          yError*LimelightConstants.kPY,
+          xError*LimelightConstants.kPX*-1,
+          0,
+          false,
+          true
+      );
+    }
   }
   // Called once the command ends or is interrupted.
   @Override
@@ -72,7 +84,7 @@ public class PointToSpeakerCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((Math.abs(xError)<2 && Math.abs(yError)<2) && tx.getDouble(0)!=0) {
+    if((Math.abs(xError)<LimelightConstants.tolerance && Math.abs(yError)<LimelightConstants.tolerance) && tx.getDouble(0)!=0) {
         return true;
     }
     return false;

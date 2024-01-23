@@ -101,8 +101,8 @@ public class DriveSubsystem extends SubsystemBase {
       this::getRobotRelativeChassisSpeeds,
       this::driveRobotRelative,
       new HolonomicPathFollowerConfig(
-        new PIDConstants(0, 0, 0),
-        new PIDConstants(.21178125, .0, 0),
+        new PIDConstants(1, 0, .2),
+        new PIDConstants(2, 0, 0),
         2,
         0.77,
         new ReplanningConfig()
@@ -128,7 +128,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(-m_gyro.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -308,23 +308,5 @@ public class DriveSubsystem extends SubsystemBase {
   public ChassisSpeeds getRobotRelativeChassisSpeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState());     
   }
-
-  public Command getAimToAprilTagCommand() {
-    return this.startEnd(
-      () -> {
-        ledMode.setDouble(3);
-        xError = tx.getDouble(0)-LimelightConstants.speakerAimtx;
-        yError = ty.getDouble(0) - LimelightConstants.speakerAimty;
-        this.drive(
-          xError*LimelightConstants.kPX,
-          yError*LimelightConstants.kPY,
-          0,
-          false,
-          true);
-      }, 
-      ()  -> {
-        ledMode.setDouble(1);
-        this.drive(0, 0, m_currentRotation, false, false);
-      });
-  }
+  
 }

@@ -77,13 +77,19 @@ private boolean fieldCentric = true;
   public void execute() {
     // Updated Drive Command
 
-    leftX = filterX.calculate(Robot.getDriveControlJoystick().getRawAxis(0));
-    leftY = filterY.calculate(Robot.getDriveControlJoystick().getRawAxis(1));
+    // Use these for Competition
+    //leftX = filterX.calculate(Robot.getDriveControlJoystick().getRawAxis(0)) * speedControl;
+    //leftY = filterY.calculate(Robot.getDriveControlJoystick().getRawAxis(1)) * speedControl;
 
-    // leftX = Robot.getDriveControlJoystick().getRawAxis(0);
-    // leftY = Robot.getDriveControlJoystick().getRawAxis(1);
+    // Slow Mode for Testing
+    leftX = Robot.getDriveControlJoystick().getRawAxis(0) * speedControl;
+    leftY = Robot.getDriveControlJoystick().getRawAxis(1) * speedControl;
+
+    // Leave this as is
     rightX = Robot.getDriveControlJoystick().getRawAxis(4); 
 
+    // Clip to Max Value
+    
 
     if (Robot.getDriveControlJoystick().getRawAxis(2) > 0.5) { //left trigger
       ledMode.setDouble(3); // On
