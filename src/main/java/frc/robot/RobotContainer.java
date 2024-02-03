@@ -24,7 +24,9 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.LaunchNote;
 import frc.robot.commands.PointToSpeakerCommand;
 import frc.robot.commands.PrepareLaunch;
+import frc.robot.commands.ShootWhenWillHitCommand;
 import frc.robot.commands.StopShooter;
+import frc.robot.subsystems.AmpTrapSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HandSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -56,8 +58,11 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final HandSubsystem m_HandSubsystem = new HandSubsystem();
+  private final AmpTrapSubsystem m_ArmTrapSubsystem = new AmpTrapSubsystem();
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_actuatorController = new XboxController(OIConstants.kActuatorControllerPort);
 
   //Create Triggers
   Trigger y = new JoystickButton(m_driverController, XboxController.Button.kY.value);
@@ -66,6 +71,12 @@ public class RobotContainer {
   Trigger x = new JoystickButton(m_driverController, XboxController.Button.kX.value);
   Trigger rBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   Trigger lBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+
+  Trigger actuatorA = new JoystickButton(m_actuatorController, XboxController.Button.kA.value);
+  Trigger actuatorB = new JoystickButton(m_actuatorController, XboxController.Button.kB.value);
+  Trigger actuatorX = new JoystickButton(m_actuatorController, XboxController.Button.kX.value);
+  Trigger actuatorY = new JoystickButton(m_actuatorController, XboxController.Button.kY.value);
+
 
   //Trigger leftShouler = new JoystickButton(m_driverController, XboxController.Button.k.value);
   private final SendableChooser<Command> autoChooser;
@@ -104,8 +115,8 @@ public class RobotContainer {
    * general style is camelcase for NamedCommands to differentiate them from the class name
    */
   private void configureNamedCommands() {
-    NamedCommands.registerCommand("prepareLaunch", new PrepareLaunch(m_ShooterSubsystem));
-    NamedCommands.registerCommand("launchNote", new LaunchNote(m_ShooterSubsystem));
+    NamedCommands.registerCommand("prepareLaunch", new PrepareLaunch(m_ShooterSubsystem).withTimeout(.5));
+    NamedCommands.registerCommand("launchNote", new LaunchNote(m_ShooterSubsystem).withTimeout(.5));
     NamedCommands.registerCommand("intakeSource", m_ShooterSubsystem.getIntakeCommand());
     NamedCommands.registerCommand("stopShooter", new StopShooter(m_ShooterSubsystem));
     NamedCommands.registerCommand("aimAndScore", new SequentialCommandGroup(new PointToSpeakerCommand(m_robotDrive),
@@ -149,6 +160,11 @@ public class RobotContainer {
     lBumper.whileTrue(
       m_HandSubsystem.getIntakeCommand()
     );
+
+    // AmpTrap Event Listeners
+    actuatorY.whileTrue(m_ArmTrapSubsystem.getOuttakeCommand());
+
+    actuatorA.whileTrue(m_ArmTrapSubsystem.getIntakeCommand());
 
 
      

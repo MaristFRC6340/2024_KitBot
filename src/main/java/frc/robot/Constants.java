@@ -118,6 +118,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kActuatorControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
   }
 
@@ -177,5 +178,11 @@ public final class Constants {
     public static final double kPX = .015;
     public static final double kPY = .015;
     public static double tolerance = 1.5;
+  }
+
+  public static final class AmpTrapConstants {
+    public static final int kAmpId = 9; // Update Mr. Michaud 03 Feb 24
+    public static final double kIntakePower = 0.5;
+    public static final double kOuttakePower = 0.5;
   }
 }

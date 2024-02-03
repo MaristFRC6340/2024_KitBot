@@ -101,7 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
       this::getRobotRelativeChassisSpeeds,
       this::driveRobotRelative,
       new HolonomicPathFollowerConfig(
-        new PIDConstants(1, 0, .2),
+        new PIDConstants(.7, 0, .2),
         new PIDConstants(2, 0, 0),
         2,
         0.77,

@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
 
   //Create joystick for driver control
   public static Joystick m_driveControlJoystick = new Joystick(Constants.OIConstants.kDriverControllerPort);
+  public static Joystick m_actuatorControlJoystic = new Joystick(Constants.OIConstants.kActuatorControllerPort);
 
   /**
    * This function is run when the robot is first started up and should be used for any
