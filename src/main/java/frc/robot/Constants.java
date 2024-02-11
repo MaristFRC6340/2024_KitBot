@@ -143,6 +143,7 @@ public final class Constants {
   public static class LauncherConstants {
     // PWM ports/CAN IDs for motor controllers
     public static final int kFeederID = 6;
+
     public static final int kLauncherID = 5;
 
     // Current limit for launcher and feed wheels
@@ -173,8 +174,8 @@ public final class Constants {
   }
 
   public static final class LimelightConstants {
-    public static final double speakerAimtx = -20.91;
-    public static final double speakerAimty = 4.75;
+    public static final double speakerAimtx = -5.07;
+    public static final double speakerAimty = -15.26;
     public static final double kPX = .015;
     public static final double kPY = .015;
     public static double tolerance = 1.5;
@@ -182,7 +183,17 @@ public final class Constants {
 
   public static final class AmpTrapConstants {
     public static final int kAmpId = 9; // Update Mr. Michaud 03 Feb 24
-    public static final double kIntakePower = 0.5;
-    public static final double kOuttakePower = 0.5;
+    public static final double kIntakePower = 1;
+    public static final double kOuttakePower = -1;
+  }
+
+  public static final class TelescopingAmpConstants {
+    public static final int kTopFingerID = 21;
+    public static final int kLowerFingerID = 20;
+    public static final int kTelescopeID = 22;
+
+    public static final double kRotatingOffset = .9;
+    public static final double kIntakeSpeed = .2;
+    public static final double kOuttakeSpeed = -.9;
   }
 }

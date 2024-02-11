@@ -19,7 +19,7 @@ public class AmpTrapSubsystem extends SubsystemBase {
 
   /** Creates a new AmpTrapSubsystem. */
   public AmpTrapSubsystem() {
-    ampMotor = new CANSparkMax(Constants.AmpTrapConstants.kAmpId, CANSparkLowLevel.MotorType.kBrushless);
+    ampMotor = new CANSparkMax(Constants.AmpTrapConstants.kAmpId, CANSparkLowLevel.MotorType.kBrushed);
 
   }
 

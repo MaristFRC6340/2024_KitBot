@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants;
 import frc.robot.Constants.LauncherConstants;
@@ -22,7 +22,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     topMotor = new CANSparkMax(LauncherConstants.kLauncherID, MotorType.kBrushed);
     lowerMotor = new CANSparkMax(LauncherConstants.kFeederID, MotorType.kBrushed);
-
     topMotor.setSmartCurrentLimit(LauncherConstants.kLauncherCurrentLimit);
     lowerMotor.setSmartCurrentLimit(LauncherConstants.kFeedCurrentLimit);
   }

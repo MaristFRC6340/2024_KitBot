@@ -30,6 +30,7 @@ import frc.robot.subsystems.AmpTrapSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HandSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TelescopingAmpTestSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -57,9 +58,9 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  private final HandSubsystem m_HandSubsystem = new HandSubsystem();
-  private final AmpTrapSubsystem m_ArmTrapSubsystem = new AmpTrapSubsystem();
-
+  //private final HandSubsystem m_HandSubsystem = new HandSubsystem();
+  //private final AmpTrapSubsystem m_ArmTrapSubsystem = new AmpTrapSubsystem();
+  private final TelescopingAmpTestSubsystem m_TelescopingAmpTestSubsystem = new TelescopingAmpTestSubsystem();
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_actuatorController = new XboxController(OIConstants.kActuatorControllerPort);
@@ -76,8 +77,15 @@ public class RobotContainer {
   Trigger actuatorB = new JoystickButton(m_actuatorController, XboxController.Button.kB.value);
   Trigger actuatorX = new JoystickButton(m_actuatorController, XboxController.Button.kX.value);
   Trigger actuatorY = new JoystickButton(m_actuatorController, XboxController.Button.kY.value);
+  
+  Trigger actuatorLeftBumper = new JoystickButton(m_actuatorController, XboxController.Button.kLeftBumper.value);
+  Trigger actuatorRightBumper = new JoystickButton(m_actuatorController, XboxController.Button.kRightBumper.value);
 
+  Trigger actuatorRightTrigger = new Trigger(() -> m_actuatorController.getRightTriggerAxis()>.2);
+  Trigger actuatorLeftTrigger = new Trigger(() -> m_actuatorController.getLeftTriggerAxis()>.2);
 
+  Trigger actuatorLeftY = new Trigger(() -> Math.abs(m_actuatorController.getLeftY())>.1);
+  Trigger actuatorRightY = new Trigger(() -> Math.abs(m_actuatorController.getRightY())>.1);
   //Trigger leftShouler = new JoystickButton(m_driverController, XboxController.Button.k.value);
   private final SendableChooser<Command> autoChooser;
 
@@ -152,19 +160,19 @@ public class RobotContainer {
     );
 
     
-    x.whileTrue(
-      m_HandSubsystem.getOuttakeCommand()
-    );
+    // x.whileTrue(
+    //   m_HandSubsystem.getOuttakeCommand()
+    // );
     
 
-    lBumper.whileTrue(
-      m_HandSubsystem.getIntakeCommand()
-    );
+    // lBumper.whileTrue(
+    //   m_HandSubsystem.getIntakeCommand()
+    // );
 
-    // AmpTrap Event Listeners
-    actuatorY.whileTrue(m_ArmTrapSubsystem.getOuttakeCommand());
+    // // AmpTrap Event Listeners
+    // actuatorY.whileTrue(m_ArmTrapSubsystem.getOuttakeCommand());
 
-    actuatorA.whileTrue(m_ArmTrapSubsystem.getIntakeCommand());
+    // actuatorA.whileTrue(m_ArmTrapSubsystem.getIntakeCommand());
 
 
      
@@ -176,10 +184,18 @@ public class RobotContainer {
     );
     
 
-    //Give smart dashboard autos
+    actuatorLeftBumper.whileTrue(m_TelescopingAmpTestSubsystem.getMoveTelescopeCommand(-.2));
+    actuatorRightBumper.whileTrue(m_TelescopingAmpTestSubsystem.getMoveTelescopeCommand(.2));
+    actuatorLeftTrigger.whileTrue(m_TelescopingAmpTestSubsystem.getRotateNoteCommand(.2));
+    actuatorRightTrigger.whileTrue(m_TelescopingAmpTestSubsystem.getRotateNoteCommand(-.2));
 
-    //SmartDashboard.putData("Example Auto", new PathPlannerAuto("Example Auto"));
-  }
+      actuatorLeftY.whileTrue(m_TelescopingAmpTestSubsystem.getRunLowerFingerCommand(() -> m_actuatorController.getLeftY()));
+      actuatorRightY.whileTrue(m_TelescopingAmpTestSubsystem.getRunTopFingerCommand(() -> m_actuatorController.getRightY()));
+
+    actuatorA.whileTrue(m_TelescopingAmpTestSubsystem.getIntakeNoteCommand());
+    actuatorY.whileTrue(m_TelescopingAmpTestSubsystem.getOuttakeNoteCommand());
+    
+    }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -275,4 +291,6 @@ public class RobotContainer {
   // public Command getExampleAutoCommand() {
   //   return new PathPlannerAuto("Example Auto");
   // }
+
+
 }
