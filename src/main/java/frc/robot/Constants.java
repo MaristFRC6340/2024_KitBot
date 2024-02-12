@@ -176,6 +176,8 @@ public final class Constants {
   public static final class LimelightConstants {
     public static final double speakerAimtx = -5.07;
     public static final double speakerAimty = -15.26;
+    public static final double kAmpAimTX = -9.4;
+    public static final double kAmpAimTY = 1;
     public static final double kPX = .015;
     public static final double kPY = .015;
     public static double tolerance = 1.5;

@@ -21,6 +21,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveToAmpCommand;
 import frc.robot.commands.LaunchNote;
 import frc.robot.commands.PointToSpeakerCommand;
 import frc.robot.commands.PrepareLaunch;
@@ -32,6 +33,8 @@ import frc.robot.subsystems.HandSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TelescopingAmpTestSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -182,7 +185,13 @@ public class RobotContainer {
         new WaitCommand(.25),
         new LaunchNote(m_ShooterSubsystem)).handleInterrupt(() -> m_ShooterSubsystem.stop())
     );
-    
+    x.whileTrue(new SequentialCommandGroup(
+      new DriveToAmpCommand(m_robotDrive),
+      m_robotDrive.getDriveForwardCommand(.2).withTimeout(1),
+      m_robotDrive.getDriveForwardCommand(-.1).withTimeout(.23),
+      m_TelescopingAmpTestSubsystem.getRotateNoteCommand(-.2).withTimeout(1),
+      m_TelescopingAmpTestSubsystem.getOuttakeNoteCommand().withTimeout(2)
+    ));
 
     actuatorLeftBumper.whileTrue(m_TelescopingAmpTestSubsystem.getMoveTelescopeCommand(-.2));
     actuatorRightBumper.whileTrue(m_TelescopingAmpTestSubsystem.getMoveTelescopeCommand(.2));

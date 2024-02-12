@@ -309,4 +309,11 @@ public class DriveSubsystem extends SubsystemBase {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState());     
   }
   
+  public Command getDriveForwardCommand(double speed) {
+    return this.startEnd(() -> {
+      this.drive(speed, 0, 0, false, false);
+    }, () -> {
+      this.drive(0, 0, 0, false, false);
+    });
+  }
 }
